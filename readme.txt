@@ -1,3 +1,5 @@
+Slater Matsil often compares internal case claim files with official USPTO files, but these claims almost always are ordered differently between the two documents, making comparisons tedious. This tool uses content-based text analysis to reorder the claims within internal case documents, saving approx. 12 hours of work per week.
+
 reorder_table.py:
 Given a table produced by claim compare, reorders the claims in the left column (case) to match the order of the claims in the right column (patent)
 
