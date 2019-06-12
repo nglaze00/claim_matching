@@ -96,7 +96,7 @@ def patent_to_list(file):
         if after_header and before_footer:
             paras.append(para)
             i += 1
-        if para[:4] == "What":
+        if "claimed is:" in para[:30]:
             after_header = True
             i += 1
         i += 1
