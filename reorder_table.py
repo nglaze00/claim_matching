@@ -1,3 +1,10 @@
+"""
+Created by Nicholas Glaze
+
+Module for reordering a case patent claims document according to the US Patent & Trademark Office's
+master copy. Reorders left column of an MS Word table according to the order of claims in the right column.
+"""
+
 import docx, time
 from collections import defaultdict
 
@@ -127,6 +134,7 @@ try:
     reorder_claims("table.docx")
     print("Claims matched successfully. Closing in 5 seconds...")
     time.sleep(5)
-except:
+except Exception as e:
+    print("Claim matching failed.", e)
     time.sleep(5)
 
