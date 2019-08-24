@@ -1,13 +1,13 @@
 """
 Created by Nicholas Glaze
 
-Module for reordering a case patent claims document according to the US Patent & Trademark Office's
-master copy. Uses separate documents for USPTO claims and case patent claims.
+Module for reordering a local uspto claims document according to the US Patent & Trademark Office's
+master copy. Uses separate documents for USPTO claims and local uspto claims.
 """
 
 
 
-import docx, time
+import docx, time, os
 from collections import defaultdict
 
 
@@ -74,7 +74,6 @@ def compute_diffs(key, other, slice, fast):
         matched[closest[0]] = True
         diffs_row.append(closest[0])
         diffs.append(diffs_row)
-
     return diffs
 
 def reorder_lists(key, other, diffs):
@@ -87,13 +86,15 @@ def reorder_lists(key, other, diffs):
     """
     reordered = [""] * len(other)
     for i in range(len(key)):
+        if diffs[i][diffs[i][-1]] > 4:
+            print("Claim " + str(i) + " may not match; check it!")
         reordered[i] = other[diffs[i][-1]]
     return key, reordered
 
-def patent_to_list(file):
+def uspto_to_list(file):
     """
     Extracts and returns the claims present in a Google Patents file
-    :param file: filename of patent document
+    :param file: filename of uspto document
     :return: list of strings, each representing a claim
     """
     doc = docx.Document(file)
@@ -116,11 +117,11 @@ def patent_to_list(file):
             i += 1
         i += 1
     return paras
-#patent_to_list("patent example.docx")
-def case_to_list(file):
+
+def local_to_list(file):
     """
-    Extracts and returns the claims present in a case file
-    :param file: filename of case document
+    Extracts and returns the claims present in a local file
+    :param file: filename of local document
     :return: list of strings, each representing a claim
     """
     doc = docx.Document(file)
@@ -137,36 +138,67 @@ def case_to_list(file):
             item = item.replace("\n", "")   # Reformat without tabs / newlines
             item = item.replace("\t", " ")
             if len(item) > 1 and "." in item[1:5]:
-                paras.append(para)
-                para = ""
+                try:
+                    paras.append(para)
+                    para = ""
+
+                except Exception as e:
+                    para = ""
             para += " " + item
 
         i += 1
     paras.append(para)
     return paras[1:]
 
-def reorder_case_claims(patent_file, case_file):
+def reorder_local_claims(uspto_path, local_path):
     """
-    Reorders the claims in case_file, using patent_file as the key.
-    :param patent_file: string - filename
-    :param case_file: string - filename
-    :return: none; produces case_file_reordered.docx
+    Reorders the claims in local_file, using uspto_file as the key.
+    :param uspto_path: string - filepath
+    :param local_path: string - filepath
+    :return: none; produces local_file_reordered.docx
     """
-    other, key = case_to_list(case_file), patent_to_list(patent_file)
-
+    other, key = local_to_list(local_path), uspto_to_list(uspto_path)
+    assert len(key) > 0
     diffs = compute_diffs(key, other, slice, False)
+
+
     _, reordered = reorder_lists(key, other, diffs)
-    doc = docx.Document(case_file)
+    doc = docx.Document(local_path)
     doc._body.clear_content()
-    for claim in reordered:
+    for i, claim in enumerate(reordered):
         doc.add_paragraph(claim)
         doc.add_paragraph("")
-    doc.save(case_file.split(".")[0] + "_reordered.docx")
 
-try:
-    reorder_case_claims("patent.docx", "case.docx")
-    print("Claims matched successfully. Closing in 5 seconds...")
-    time.sleep(5)
-except Exception as e:
-    print("Claim matching failed.", e)
-    time.sleep(5)
+    filename = local_path.split("\\")[-1].split(".")[0] + "_reordered.docx"
+    print("File " + filename + " created")
+
+    doc.save("test\\local_reordered\\" + filename)
+
+
+if __name__ == "__main__":
+    try:
+        try:
+            os.mkdir("test\\local_reordered")
+        except:
+            pass
+        uspto_dir = "test\\uspto"
+        local_dir = "test\\local"
+        uspto_files = os.listdir(uspto_dir)
+        local_files = os.listdir(local_dir)
+
+        assert len(uspto_files) == len(local_files), "# of USPTO and local files doesn't match"
+        # Corresponding files must be at the same alphabetically sorted index
+        # Recommend (uspto1.docx, local1.docx), (uspto2.docx, local2.docx), etc
+        for uspto_file, local_file in zip(uspto_files, local_files):
+            print("Matching " + local_file + " to " + uspto_file)z
+            try:
+                reorder_local_claims(uspto_dir + "\\" + uspto_file, local_dir + "\\" +  local_file)
+            except Exception as e:
+                print("Claim reordering failed:", e)
+
+
+        print("Claims reordered successfully. This window will stay open until you close it.")
+        time.sleep(10000)
+    except Exception as e:
+        print("Claim reordering failed:", e)
+        time.sleep(10000)
