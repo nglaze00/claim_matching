@@ -1,3 +1,4 @@
+# Patent file reordering tool
 The law firm Slater Matsil, LLP often compares internal case claim files with official USPTO files, but these claims almost always are ordered differently between the two documents, making comparisons tedious. This tool uses content-based text analysis to reorder the claims within internal case documents, saving approx. 12 hours of work per week.
 
 reorder_table.py:
@@ -14,3 +15,5 @@ Given case and patent files, reorders the claims in the case file to match the o
 Case file must be named "case.docx"; patent file must be named "patent.docx" (both case sensitive)
 
 Patent file must contain a line beginning with "What is claimed is:" after its header, and case file must contain no additional information besides numbered claims.
+
+
