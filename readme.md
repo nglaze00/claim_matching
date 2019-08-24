@@ -21,6 +21,8 @@ If the software detects any disparities in the claims present in the documents, 
 ```
 Claim 3 may not match; check it!
 ```
+* The script pairs local files to USPTO in lexicographic order, so a standardized naming method is recommended 
+  * I suggest **local1.docx, local2.docx,** etc... and **uspto1, uspto2.docx,** etc...
 * USPTO files must contain a line beginning with **"What is claimed is:"** after its header, and local files must contain no additional information besides numbered claims (This formatting has held for all USPTO and Slater Matsil files the script has run on).
 
 ## Example
