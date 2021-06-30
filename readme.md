@@ -1,4 +1,4 @@
-# Claim Matching for Slater Matsli, LLP
+# Claim Matching for Slater Matsil, LLP
 Python script for content-based reorganization of law firm Slater Matsil's internal case files. Used by law firm Slater Matsil to save 12 hours of work per week. 
 
 ## Overview
