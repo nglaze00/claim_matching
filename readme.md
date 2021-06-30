@@ -2,11 +2,9 @@
 Python script for content-based reorganization of law firm Slater Matsil's internal case files. Used by law firm Slater Matsil to save 12 hours of work per week. 
 
 ## Overview
-The law firm Slater Matsil, LLP handles many cases simultaneously, each of which can have dozens of files containing descriptions of the various patent claims involved with the case. One step of their case workflow is verifying that the content of their files matches that of those on file with the US Patent & Trademark Office (USPTO).
+The law firm Slater Matsil, LLP handles many cases simultaneously, each of which can have dozens of files containing descriptions of the various patent claims involved with the case. One step of their case workflow is verifying that the contents of each claim file match that of those on file with the US Patent & Trademark Office (USPTO).
 
-Due to the fact that the claims within each USPTO file are almost always appear in a different order than those stored locally by Slater Matsil, this process often takes over 10 hours per week. My tool automates this process, allowing it to be carried out in almost no time.
-
-This Python script reorganizes the claims within Slater Matsil's files to match those in the USPTO's files, and notifies the user if any files exist with claims that may not match.
+Due to the fact that the claims within each USPTO file are almost always appear in a different order than those stored locally by Slater Matsil, this process often takes over 10 hours per week. My tool automates this process by reordering the claims in Slater Matsil's files to match the order of those in the USPTO's files, and notifies the user if any files exist with claims that may not match. This almost completely automates this verification process; instead of having to manually reorder the local files before comparing claims to ensure they match, the user simply has to run this script, and then manually check only files flagged by the output of the script. 
 
 ## Installation / Usage
 The most useful file is **reorder_docs.exe**, which reorders all the files in one folder named **local** to match those in another folder named **uspto**.
